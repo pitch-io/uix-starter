@@ -5,7 +5,8 @@
     "react-dom": "^18.2.0"
   },
   "scripts": {
-    "start": "shadow-cljs watch app"
+    "start": "shadow-cljs watch app",
+    "release": "shadow-cljs release app"
   },
   "devDependencies": {
     "react-refresh": "^0.14.0",
