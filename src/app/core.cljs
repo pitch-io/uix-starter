@@ -1,9 +1,14 @@
 (ns app.core
   (:require
     [cljs.spec.alpha :as s]
-    [clojure.edn :as edn]
     [uix.core :as uix :refer [defui $]]
-    [uix.dom]))
+    [uix.dom]
+    [app.hooks :as hooks]
+    [app.subs]
+    [app.handlers]
+    [app.fx]
+    [app.db]
+    [re-frame.core :as rf]))
 
 (defui header []
   ($ :header.app-header
@@ -26,8 +31,7 @@
        :on-key-down (fn [^js e]
                       (when (= "Enter" (.-key e))
                         (set-value! "")
-                        (on-add-todo #(assoc % (js/Date.now) {:text value
-                                                              :status :unresolved}))))})))
+                        (on-add-todo {:text value :status :unresolved})))})))
 
 (defui editable-text [{:keys [text text-style on-done-editing]}]
   (let [[editing? set-editing!] (uix/use-state false)
@@ -57,59 +61,40 @@
   (s/keys :req-un [:todo/text :todo/status]))
 
 (defui todo-item
-  [{:keys [created-at text status on-update-todos] :as props}]
+  [{:keys [created-at text status on-remove-todo on-set-todo-text] :as props}]
   {:pre [(s/valid? :todo/item props)]}
   ($ :.todo-item
     {:key created-at}
     ($ :input.todo-item-control
       {:type :checkbox
        :checked (= status :resolved)
-       :on-change (fn [_]
-                    (on-update-todos #(update-in % [created-at :status] {:unresolved :resolved
-                                                                         :resolved :unresolved})))})
+       :on-change #(rf/dispatch [:todo/toggle-status created-at])})
     ($ editable-text
       {:text text
        :text-style {:text-decoration (when (= :resolved status) :line-through)}
-       :on-done-editing (fn [value]
-                          (on-update-todos #(assoc-in % [created-at :text] value)))})
+       :on-done-editing #(on-set-todo-text created-at %)})
     ($ :button.todo-item-delete-button
-      {:on-click (fn [_]
-                   (on-update-todos #(dissoc % created-at)))}
+      {:on-click #(on-remove-todo created-at)}
       "×")))
 
-(defn use-persistent-state
-  "Loads initial state from local storage and persists every updated state value
-  Returns a tuple of the current state value and an updater function"
-  [store-key initial-value]
-  (let [[value set-value!] (uix/use-state initial-value)]
-    (uix/use-effect
-      (fn []
-        (let [value (edn/read-string (js/localStorage.getItem store-key))]
-          (set-value! #(into % value))))
-      [store-key])
-    (uix/use-effect
-      (fn []
-        (js/localStorage.setItem store-key (str value)))
-      [value store-key])
-    [value set-value!]))
-
-
 (defui app []
-  (let [[todos set-todos!] (use-persistent-state "uix-starter/todos" (sorted-map-by >))]
+  (let [todos (hooks/use-subscribe [:app/todos])]
     ($ :.app
       ($ header)
-      ($ text-field {:on-add-todo set-todos!})
+      ($ text-field {:on-add-todo #(rf/dispatch [:todo/add %])})
       (for [[created-at todo] todos]
         ($ todo-item
           (assoc todo :created-at created-at
                       :key created-at
-                      :on-update-todos set-todos!)))
+                      :on-remove-todo #(rf/dispatch [:todo/remove %])
+                      :on-set-todo-text #(rf/dispatch [:todo/set-text %1 %2]))))
       ($ footer))))
 
 (defonce root
   (uix.dom/create-root (js/document.getElementById "root")))
 
 (defn render []
+  (rf/dispatch-sync [:app/init-db app.db/default-db])
   (uix.dom/render-root ($ app) root))
 
 (defn ^:export init []
