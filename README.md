@@ -2,7 +2,7 @@
 Template project to start building a web app with [UIx2](https://github.com/pitch-io/uix)
 
 ## Quick setup
-```
+```shell
 npx create-uix-app my-app # bare-bones project
 npx create-uix-app my-app --re-frame # adds re-frame setup
 ```
