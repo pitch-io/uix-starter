@@ -1,7 +1,10 @@
 {:deps true
- :dev-http {8080 "public"}
  :builds {:app
-          {:target :browser
-           :modules {:main {:entries [app.core]
-                            :init-fn app.core/init}}
-           :devtools {:preloads [preload devtools.preload]}}}}
+          {:target :react-native
+           :init-fn app.core/start
+           :output-dir "app"
+           :compiler-options {:source-map-path "app/"
+                              :source-map-include-sources-content true
+                              :warnings-as-errors true}
+           :devtools {:preloads [preload]
+                      :build-notify preload/build-notify}}}}
