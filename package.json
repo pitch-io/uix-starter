@@ -1,7 +1,15 @@
 {
   "scripts": {
+    "expo:start": "expo start",
     "cljs:dev": "clojure -M -m shadow.cljs.devtools.cli watch app",
     "cljs:release": "clojure -M -m shadow.cljs.devtools.cli release app"
+  },
+  "main": "app/index.js",
+  "dependencies": {
+    "expo": "~49.0.13",
+    "react": "18.2.0",
+    "react-native": "0.72.5",
+    "create-react-class": "^15.7.0"
   },
   "devDependencies": {
     "react-refresh": "^0.14.0"
