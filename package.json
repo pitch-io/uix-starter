@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "dev": "concurrently --raw -k \"npm:expo:start\" \"npm:cljs:dev\"",
     "expo:start": "expo start",
     "cljs:dev": "clojure -M -m shadow.cljs.devtools.cli watch app",
     "cljs:release": "clojure -M -m shadow.cljs.devtools.cli release app"
@@ -12,6 +13,7 @@
     "create-react-class": "^15.7.0"
   },
   "devDependencies": {
+    "concurrently": "^8.2.1",
     "react-refresh": "^0.14.0"
   }
 }
