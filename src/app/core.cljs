@@ -1,6 +1,6 @@
 (ns app.core
   (:require [react-native :as rn]
-            [shadow.expo :as expo]
+            ["expo" :as expo]
             [uix.core :refer [$ defui] :as uix]))
 
 (defui counter []
@@ -25,15 +25,10 @@
         "Hello! 👋 ")
      ($ counter)))
 
-(defn start
-  {:dev/after-load true}
-  []
-  (expo/render-root ($ root)))
-
 (defn ^:export init []
   ;; Disabling Hot Reloading so that Shadow CLJS can take over
   (-> rn/NativeModules
       .-DevSettings
       (.setHotLoadingEnabled false));
 
-  (start))
+  (expo/registerRootComponent root))

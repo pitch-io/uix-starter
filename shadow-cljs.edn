@@ -6,6 +6,5 @@
            :compiler-options {:source-map-path "app/"
                               :source-map-include-sources-content true
                               :warnings-as-errors true}
-           :devtools {:autoload true
-                      :preloads [preload]
+           :devtools {:preloads [preload]
                       :build-notify preload/build-notify}}}}
