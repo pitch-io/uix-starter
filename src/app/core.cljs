@@ -29,15 +29,5 @@
         "Hello! 👋 ")
      ($ counter)))
 
-(defn disable-hot-reloading!
-  "Disables React Native's own Hot Reloading, in favor of UIx and fast refresh.
-
-   Only has an effect on platforms where available (iOS & Android) but not on i.e. Web"
-  []
-  (some-> rn/NativeModules
-          .-DevSettings
-          (.setHotLoadingEnabled false)))
-
 (defn ^:export init []
-  (disable-hot-reloading!)
   (expo/registerRootComponent root))
