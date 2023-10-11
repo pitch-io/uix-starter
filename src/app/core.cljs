@@ -10,10 +10,14 @@
                            :font-weight "500"
                            :text-align :center}}
           "You've counted to: " count)
-       ($ rn/Button {:on-press #(set-count! inc)
-                     :title "Tap here to ++"})
-       ($ rn/Button {:on-press #(set-count! dec)
-                     :title "Tap here to --"}))))
+
+       ($ rn/Pressable {:on-press #(set-count! inc)}
+          ($ rn/Text {:style {:user-select "none"}}
+             "Tap here to ++"))
+
+       ($ rn/Pressable {:on-press #(set-count! dec)}
+          ($ rn/Text {:style {:user-select "none"}}
+             "Tap here to --")))))
 
 (defui root []
   ($ rn/View {:style {:flex 1
