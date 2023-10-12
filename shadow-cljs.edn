@@ -1,7 +1,7 @@
 {:deps true
  :builds {:app
           {:target :react-native
-           :init-fn app.core/start
+           :init-fn app.core/init
            :output-dir "app"
            :compiler-options {:source-map-path "app/"
                               :source-map-include-sources-content true
