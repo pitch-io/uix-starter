@@ -1,19 +1,13 @@
 # uix-starter
-Template project to start building a web app with [UIx2](https://github.com/pitch-io/uix)
-
-## Quick setup
-```shell
-npx create-uix-app my-app # bare-bones project
-npx create-uix-app my-app --re-frame # adds re-frame setup
-```
+Template project to start building a React Native app with Expo and [UIx](https://github.com/pitch-io/uix)
 
 ## Development
 ```shell
-yarn install # install NPM deps
-yarn dev # run dev build in watch mode with CLJS REPL
+yarn # install NPM deps
+yarn dev # run Expo and cljs builds in watch mode
 ```
 
 ## Production
 ```shell
-yarn release # build production bundle
+yarn cljs:release # build production bundle
 ```
