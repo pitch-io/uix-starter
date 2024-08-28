@@ -4,14 +4,27 @@
     "dev": "shadow-cljs -A:dev watch app & yarn styles-dev",
     "release": "shadow-cljs -A:dev release app && yarn styles-release",
     "styles-dev": "onchange -o '> public/main.css && lightningcss --bundle public/main.css -o public/main.css' -i src/**/*.css -- cat src/**/*.css",
-    "styles-release": "cat src/**/*.css > public/main.css && lightningcss --minify --bundle public/main.css -o public/main.css"
+    "styles-release": "cat src/**/*.css > public/main.css && lightningcss --minify --bundle public/main.css -o public/main.css",
+    "start:libs": "mkdir -p target/gen && touch target/gen/libs.js && node watch.mjs",
+    "build:libs": "node build.mjs"
   },
-  "devDependencies": {
-    "lightningcss-cli": "^1.19.0",
-    "onchange": "^7.1.0",
+  "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-refresh": "^0.14.0",
-    "shadow-cljs": "2.22.9"
+    "react-refresh": "^0.14.0"
+  },
+  "devDependencies": {
+    "@svgr/core": "^8.1.0",
+    "@svgr/plugin-jsx": "^8.1.0",
+    "@svgr/plugin-prettier": "^8.1.0",
+    "@svgr/plugin-svgo": "^8.1.0",
+    "esbuild": "0.20.1",
+    "lightningcss-cli": "^1.19.0",
+    "onchange": "^7.1.0",
+    "shadow-cljs": "2.26.3"
+  },
+  "volta": {
+    "node": "20.17.0",
+    "yarn": "1.22.22"
   }
 }

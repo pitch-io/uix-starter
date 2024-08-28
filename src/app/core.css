@@ -95,6 +95,8 @@ a {
     font-size: 20px;
     color: #ff3c3c;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .todo-item-text-field {

@@ -1,5 +1,7 @@
 (ns app.core
   (:require
+    ;; svgr example
+    ["svg/cross.svg$default" :as DeleteIcon]
     [cljs.spec.alpha :as s]
     [clojure.edn :as edn]
     [uix.core :as uix :refer [defui $]]
@@ -75,7 +77,7 @@
     ($ :button.todo-item-delete-button
       {:on-click (fn [_]
                    (on-update-todos #(dissoc % created-at)))}
-      "×")))
+      ($ DeleteIcon))))
 
 (defn use-persistent-state
   "Loads initial state from local storage and persists every updated state value

@@ -4,4 +4,12 @@
           {:target :browser
            :modules {:main {:entries [app.core]
                             :init-fn app.core/init}}
-           :devtools {:preloads [preload devtools.preload]}}}}
+           :devtools {:preloads [preload devtools.preload]}
+           :js-options {:js-provider :external
+                        :external-index "target/gen/libs.js"
+                        :external-index-format :esm}
+           :release {:build-hooks [;; Esbuild must run after shadow-cljs flush so no way to optimize.
+                                   (dev.build/run-cmd-flush {:cmd ["yarn" "build:libs"]})]
+                     :module-hash-names true}
+           :dev {:build-hooks [(dev.build/run-cmd-configure
+                                       {:cmd ["yarn" "start:libs"]})]}}}}
