@@ -1,6 +1,6 @@
-# uix-starter
+# Shadow CLJS + ESBuild example
 
-Example to show how to use ESBuild with Shadow CLJS
+An example to show how to use ESBuild with Shadow CLJS
 
 [Blog post TODO LINK HERE](https://www.metosin.fi/blog)
 
