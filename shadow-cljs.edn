@@ -8,15 +8,10 @@
            :js-options {:js-provider :external
                         :external-index "target/gen/libs.js"
                         :external-index-format :esm}
-           :release {:build-hooks [;; Esbuild must run after shadow-cljs flush so no way to optimize.
-                                   ;; You can replace yarn with npm.
-                                   (dev.build/run-cmd-flush {:cmd ["yarn" "build:libs"]
-                                                             :once true})]
-                     ;; If you want to enable module-hash-names you need to fix the references in the index.html to refer to
+           :release {;; If you want to enable module-hash-names you need to fix the references in the index.html to refer to
                      ;; the new names.
                      ;; ESBuild can also enable this.
                      ;; Shadow-cljs would write information about created output files in public/js/manifest.edn and ESBuild in
                      ;; public/js/manifest.json (if you enable that in build.mjs)
                      ;; :module-hash-names true
-                     }
-           :dev {:build-hooks [(dev.build/run-cmd-configure {:cmd ["yarn" "start:libs"]})]}}}}
+                     }}}}

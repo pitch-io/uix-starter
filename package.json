@@ -1,8 +1,8 @@
 {
   "name": "uix-starter",
   "scripts": {
-    "dev": "shadow-cljs -A:dev watch app & yarn styles-dev",
-    "release": "shadow-cljs -A:dev release app && yarn styles-release",
+    "dev": "shadow-cljs -A:dev run dev.build/start & yarn styles-dev",
+    "release": "shadow-cljs -A:dev run dev.build/release && yarn styles-release",
     "styles-dev": "onchange -o '> public/main.css && lightningcss --bundle public/main.css -o public/main.css' -i src/**/*.css -- cat src/**/*.css",
     "styles-release": "cat src/**/*.css > public/main.css && lightningcss --minify --bundle public/main.css -o public/main.css",
     "start:libs": "mkdir -p target/gen && touch target/gen/libs.js && node watch.mjs",

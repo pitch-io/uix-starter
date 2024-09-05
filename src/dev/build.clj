@@ -1,4 +1,5 @@
-(ns dev.build)
+(ns dev.build
+  (:require [shadow.cljs.devtools.api :as shadow]))
 
 (defn start-process [cmd]
   (let [;; Redirect output to stdout.
@@ -11,6 +12,26 @@
     (.addShutdownHook (Runtime/getRuntime) (Thread. (fn [] (.destroy process))))
     process))
 
+;; New version - main function
+
+(defn start
+  {:shadow/requires-server true}
+  [& _args]
+  ;; TODO: Create libs.js file if doesn't exist here instead of package.json?
+  (start-process ["yarn" "start:libs"])
+  (shadow/watch :app)
+  ::started)
+
+(defn release
+  []
+  (shadow/release :app)
+  (.waitFor (start-process ["yarn" "build:libs"])))
+
+;; Old version - hooks
+
+;; TODO: Hooks might run multiple times, for example if the shadow-cljs.edn is changed
+;; -> multiple ESBuild processes
+;; Consider "main ns" to run the process & Shadow-cljs, so no need for hooks?
 (defn run-cmd-configure
   {:shadow.build/stage :configure}
   [build-state {:keys [cmd]}]
