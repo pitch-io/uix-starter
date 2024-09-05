@@ -14,12 +14,12 @@
 (defn run-cmd-configure
   {:shadow.build/stage :configure}
   [build-state {:keys [cmd]}]
-  (let [process (start-process cmd)]
-    build-state))
+  (start-process cmd)
+  build-state)
 
 (defn run-cmd-flush
   {:shadow.build/stage :flush}
-  [build-state {:keys [cmd once]}]
+  [build-state {:keys [cmd]}]
   (let [process (start-process cmd)]
-    (when once (.waitFor process))
+    (.waitFor process)
     build-state))
