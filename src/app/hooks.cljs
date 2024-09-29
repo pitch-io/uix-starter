@@ -6,46 +6,56 @@
             [reagent.impl.component :as impl.component]
             [uix.core :as uix]))
 
+(defn- cleanup-ref [ref]
+  (when-let [^ratom/Reaction temp-ref (aget ref "__rat")]
+    (remove-watch ref temp-ref)
+    (when-let [watching (.-watching temp-ref)]
+      (set! (.-watching temp-ref)
+            (.filter watching #(not (identical? ref %)))))))
+
 (defn- use-batched-subscribe
   "Takes an atom-like ref type and returns a function
   that adds change listeners to the ref"
   [^js ref]
   (uix/use-callback
-    (fn [listener]
-      ;; Adding an atom holding a set of listeners on a ref
-      (let [listeners (or (.-react-listeners ref) (atom #{}))]
-        (set! (.-react-listeners ref) listeners)
-        (swap! listeners conj listener))
-      (fn []
-        (let [listeners (.-react-listeners ref)]
-          (swap! listeners disj listener)
-          ;; When the last listener was removed,
-          ;; remove batched updates listener from the ref
-          (when (empty? @listeners)
-            (set! (.-react-listeners ref) nil)))))
-    [ref]))
+   (fn [listener]
+     ;; Adding an atom holding a set of listeners on a ref
+     (let [listeners (or (.-react-listeners ref) (atom #{}))]
+       (set! (.-react-listeners ref) listeners)
+       (swap! listeners conj listener))
+     (fn []
+       (let [listeners (.-react-listeners ref)]
+         (swap! listeners disj listener)
+         ;; When the last listener was removed,
+         ;; remove batched updates listener from the ref
+         (when (empty? @listeners)
+           (cleanup-ref ref)
+           (set! (.-react-listeners ref) nil)))))
+   [ref]))
 
 (defn- use-sync-external-store [subscribe get-snapshot]
   (useSyncExternalStoreWithSelector
-    subscribe
-    get-snapshot
-    get-snapshot
-    identity ;; selector, not using, just returning the value itself
-    =)) ;; value equality check)
+   subscribe
+   get-snapshot
+   nil ;; getServerSnapshot, only needed for SSR
+   identity ;; selector, not using, just returning the value itself
+   =)) ;; value equality check
 
 (defn- run-reaction [^js ref]
   (let [key "__rat"
         ^js rat (aget ref key)
         on-change (fn [_]
-                    ;; When the ref is updated, execute all listeners in a batch
+                    ;; When the ref is updated, schedule all listeners in a batch
                     (when-let [listeners (.-react-listeners ref)]
                       (scheduler/unstable_scheduleCallback scheduler/unstable_ImmediatePriority
-                                                           #(doseq [listener @listeners]
-                                                              (listener)))))]
+                        #(doseq [listener @listeners]
+                          (listener)))))]
     (if (nil? rat)
       (ratom/run-in-reaction
-        #(-deref ref) ref key on-change {:no-cache true})
+       #(-deref ref) ref key on-change {:no-cache true})
       (._run rat false))))
+
+;; Public API
 
 (defn use-reaction
   "Takes Reagent's Reaction,
@@ -72,10 +82,4 @@
         ;; using an empty atom when re-frame subscription is not registered
         ;; re-frame will still print the error in console
         ref (or sub (atom nil))]
-    (if ^boolean goog.DEBUG
-      ;; deref re-frame subscription directly when the hook is evaluated in REPL
-      ;; see `preload/init-repl!`
-      (if (.-eval-in-repl? js/window)
-        @sub
-        (use-reaction ref))
-      (use-reaction ref))))
+    (use-reaction ref)))
