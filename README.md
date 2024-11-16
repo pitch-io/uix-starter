@@ -1,13 +1,13 @@
 # uix-starter
-Template project to start building a web app with [UIx2](https://github.com/pitch-io/uix)
+Template project to start building a web app with [UIx](https://github.com/pitch-io/uix)
 
 ## Development
 ```shell
-yarn install # install NPM deps
-yarn dev # run dev build in watch mode with CLJS REPL
+npm i # install NPM deps
+npm run dev # run dev build in watch mode with CLJS REPL
 ```
 
 ## Production
 ```shell
-yarn release # build production bundle
+npm run release # build production bundle
 ```

@@ -3,7 +3,7 @@
     [cljs.spec.alpha :as s]
     [uix.core :as uix :refer [defui $]]
     [uix.dom]
-    [app.hooks :as hooks]
+    [uix.re-frame :as uix.rf]
     [app.subs]
     [app.handlers]
     [app.fx]
@@ -78,7 +78,7 @@
       "×")))
 
 (defui app []
-  (let [todos (hooks/use-subscribe [:app/todos])]
+  (let [todos (uix.rf/use-subscribe [:app/todos])]
     ($ :.app
       ($ header)
       ($ text-field {:on-add-todo #(rf/dispatch [:todo/add %])})
