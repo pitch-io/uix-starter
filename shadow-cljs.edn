@@ -4,4 +4,4 @@
           {:target :browser
            :modules {:main {:entries [app.core]
                             :init-fn app.core/init}}
-           :devtools {:preloads [preload devtools.preload]}}}}
+           :devtools {:preloads [uix.preload devtools.preload]}}}}

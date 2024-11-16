@@ -1,5 +1,5 @@
 # uix-starter
-Template project to start building a web app with [UIx2](https://github.com/pitch-io/uix)
+Template project to start building a web app with [UIx](https://github.com/pitch-io/uix)
 
 ## Quick setup
 ```shell
@@ -11,11 +11,11 @@ npx create-uix-app@latest MyApp --expo # create a new React Native project using
 
 ## Development
 ```shell
-yarn # install NPM deps
-yarn dev # run dev build in watch mode with CLJS REPL
+npm i # install NPM deps
+npm run dev # run dev build in watch mode with CLJS REPL
 ```
 
 ## Production
 ```shell
-yarn release # build production bundle
+npm run release # build production bundle
 ```
