@@ -1,12 +1,14 @@
 {
   "name": "uix-starter",
   "scripts": {
-    "dev": "shadow-cljs -A:dev watch app & npm run styles-dev",
+    "dev": "concurrently 'npm run cljs-dev' 'npm run styles-dev'",
+    "cljs-dev": "shadow-cljs -A:dev watch app & npm run styles-dev",
     "release": "shadow-cljs -A:dev release app && npm run styles-release",
     "styles-dev": "onchange -o '> public/main.css && lightningcss --bundle public/main.css -o public/main.css' -i src/**/*.css -- cat src/**/*.css",
     "styles-release": "cat src/**/*.css > public/main.css && lightningcss --minify --bundle public/main.css -o public/main.css"
   },
   "devDependencies": {
+    "concurrently": "^9.1.0",
     "lightningcss-cli": "^1.19.0",
     "onchange": "^7.1.0",
     "react": "^18.3.0",

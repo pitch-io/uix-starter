@@ -1,0 +1,10 @@
+**/.cache
+**/.cpcache
+**/.clj-kondo
+**/.idea
+**/target
+fly.toml
+**/node_modules
+**/.shadow-cljs
+out/cljs-runtime
+out/manifest.edn

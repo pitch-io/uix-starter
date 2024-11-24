@@ -5,6 +5,7 @@ Template project to start building a web app with [UIx](https://github.com/pitch
 ```shell
 npx create-uix-app@latest my-app # bare-bones project
 npx create-uix-app@latest my-app --re-frame # adds re-frame setup
+npx create-uix-app@latest my-app --fly-io # creates full stack app with Fly.io
 npx create-uix-app@latest MyApp --react-native # setup cljs project in existing React Native project
 npx create-uix-app@latest MyApp --expo # create a new React Native project using Expo
 ```
@@ -12,10 +13,11 @@ npx create-uix-app@latest MyApp --expo # create a new React Native project using
 ## Development
 ```shell
 npm i # install NPM deps
-npm run dev # run dev build in watch mode with CLJS REPL
+npm run dev # run front-end dev build in watch mode with CLJS REPL
 ```
 
-## Production
+## Deployment
 ```shell
-npm run release # build production bundle
+fly app create uix-starter # create a new Fly.io app, run once
+fly deploy
 ```
