@@ -95,7 +95,10 @@
 
 (defn render []
   (rf/dispatch-sync [:app/init-db app.db/default-db])
-  (uix.dom/render-root ($ app) root))
+  (uix.dom/render-root
+    ($ uix/strict-mode
+       ($ app))
+    root))
 
 (defn ^:export init []
   (render))
