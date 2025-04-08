@@ -22,7 +22,10 @@
   (uix.dom/create-root (js/document.getElementById "root")))
 
 (defn render []
-  (uix.dom/render-root ($ app) root))
+  (uix.dom/render-root
+    ($ uix/strict-mode
+       ($ app))
+    root))
 
 (defn ^:export init []
   (render))
